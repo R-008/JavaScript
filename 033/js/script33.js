@@ -19,7 +19,8 @@ P.S. Здесь есть несколько вариантов решения з
 
 // Возьмите свой код из предыдущей практики
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => { // только после загрузки 
+    // дом стркутуры начнут работать скрипты
 
     const movieDB = {
         movies: [
@@ -35,35 +36,34 @@ document.addEventListener('DOMContentLoaded', () => {
           poster = document.querySelector('.promo__bg'),
           genre = poster.querySelector('.promo__genre'),
           movieList =  document.querySelector('.promo__interactive-list'),
-          addForm = document.querySelector('form.add'),
-          addInput = addForm.querySelector('.adding__input'),
-          checkbox = addForm.querySelector('[type="checkbox"]');
+          addForm = document.querySelector('form.add'), // получаем форму с классом .add
+          addInput = addForm.querySelector('.adding__input'), // инпут
+          checkbox = addForm.querySelector('[type="checkbox"]'); // чекбокс по атрибуту
     
-    addForm.addEventListener('submit', (event) => {
-        event.preventDefault();
+    addForm.addEventListener('submit', (event) => { // навешивем событие на форму
+        event.preventDefault(); // отменяем стандартное поведение браузера
 
-        let newFilm = addInput.value;
-        const favorite = checkbox.checked;
+        let newFilm = addInput.value;// записываем данные введенные в инпут
+        const favorite = checkbox.checked; // полчаем Bool значение чекбокса
 
-        if (newFilm) {
-            if (newFilm.length > 21) {
-                newFilm = `${newFilm.substring(0, 22)}...`;
+        if (newFilm) { // полвеока не пустая ли строка, она даcт false
+            if (newFilm.length > 21) { // если > 21 символа, то...
+                newFilm = `${newFilm.substring(0, 22)}...`; // вырезаем с 0 по 22 бкувы не включительно и + ...
             }
 
-            if (favorite) {
-                console.log('Добавляем любимый фильм');
+            if (favorite) { // если чексбокс отмечен = true, то ...
+                console.log('Добавляем любимый фильм'); 
             }
-            movieDB.movies.push(newFilm);
-            sortArr(movieDB.movies);
+            movieDB.movies.push(newFilm); // записывам(пушим) введнные данные в массив
+            sortArr(movieDB.movies); // сортируем данные по алфавиту в массиве
 
-            createMovieList(movieDB.movies, movieList);
+            createMovieList(movieDB.movies, movieList); // создаетм список по новой
         }
 
-
-        event.target.reset();
+        event.target.reset(); // сбрасываем форму
     });
     
-    const deleteAdv = (arr) => {
+    const deleteAdv = (arr) => { // ф.удаляет рекламу
         arr.forEach(item => {
             item.remove();
         });
@@ -73,21 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
     //     item.remove();
     // });
     
-    const makeChanges = () => {
+    const makeChanges = () => { // ф.изменения надписи и фона
 
         genre.textContent = 'драма';
         poster.style.backgroundImage = 'url("img/bg.jpg")';
-        
     };
 
-    const sortArr =(arr) => {
+    const sortArr =(arr) => { // ф.сортировки
         arr.sort();
     };
 
-    function createMovieList(films, parent) {
+    function createMovieList(films, parent) { // ф.добавления введенного фильма в список
 
         parent.innerHTML = '';
-        sortArr(films);
+        sortArr(films); // сортируем при каждом вызове функции
         
         // console.log(poster.innerHTML);
         
@@ -99,16 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         });
 
-        document.querySelectorAll('.delete').forEach((btn, i) => {
-            btn.addEventListener('click', () => {
-                btn.parentElement.remove();
-                movieDB.movies.splice(i, 1);
+        document.querySelectorAll('.delete').forEach((btn, i) => { //перебираем все корзинки
+            // btn - кнопка, i - нумерация
+            btn.addEventListener('click', () => {// обращаемся к каждой корзинке на событие клик
+                btn.parentElement.remove();// удаляем родительский элемент
+                movieDB.movies.splice(i, 1);// вырезаем из массива
 
-                createMovieList(films, parent);
+                createMovieList(films, parent);// вызываем чтобы список (нумерация) перестраивалась
             });
         });
     }
-    deleteAdv(adv);
+    deleteAdv(adv); // вызываем функции
     makeChanges();
     createMovieList(movieDB.movies, movieList);
 
